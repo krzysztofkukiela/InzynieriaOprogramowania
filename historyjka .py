@@ -24,34 +24,38 @@ def open_file():
                         if "from" in c:
                             position1 = c.find(i)
                             position2 = c.find("from")
-                            calls.append(
-                                [file_name, c[position2 + len("from "):position1]])  # dodanie nazwy pliku to tablicy
+                            calls.append([file_name, c[position2 + len("from "):position1 - 1]])  # dodanie nazwy pliku to tablicy
                             calls_counter = calls_counter + 1
                         else:
                             position1 = c.find(i)
                             position2 = len(c)
                             calls.append(
-                                [file_name, c[position1 + len(i):position2 - 1]])  # dodanie nazwy pliku to tablicy
+                                [file_name, c[position1 + len(i) + 1:position2 - 1]])  # dodanie nazwy pliku to tablicy
                             calls_counter = calls_counter + 1
                     if i == "using" or i == "include" or i == "open" or "open(" in i:
                         # global calls_counter
                         position1 = c.find(i)
                         position2 = len(c)
-                        calls.append([file_name, c[position1 + len(i):position2 - 1]])  # dodanie nazwy pliku to tablicy
+                        calls.append([file_name, c[position1 + len(i) + 1:position2 - 1]])  # dodanie nazwy pliku to tablicy
                         calls_counter = calls_counter + 1
                     if "#" in (i):
                         break
-        for i in range(0, calls_counter):
-            print("wywolanie numer ", i + 1, "zawiera: ", calls[i])
-def graph():
-    print ("A tu bedzie stal nasz graf")
+        #for i in range(0, calls_counter):
+        #    print("wywolanie numer ", i + 1, "zawiera: ", calls[i])      # dałem w komentarz bo troche zbugowane
+        #    pass
 def exit() :
     sys.exit()
+def convert(calls):         #zamiana listy w tuple
+    return tuple(calls)
+def dep():              #wypisanie danych pod graf
+    print(convert(calls))
+def Graph():
+    data_to_graph=convert(calls)
 root = Tk()
-button_open = Button(root, text="wczytaj plik", command=open_file)
-button_graph=Button(root, text="graf", command=graph)
-button_exit= Button(root, text="koniec", command=exit)
-button_open.pack()
-button_exit.pack()
-button_graph.pack()
+button = Button(root, text="wczytaj plik", command=open_file)
+button1= Button(root, text="koniec", command=exit)
+button2= Button(root,text="pokaz zaleznosci",command=dep)
+button.pack()
+button1.pack()
+button2.pack()
 root.mainloop()
